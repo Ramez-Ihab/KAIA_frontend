@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+const Color primaryColor = Color(0xFF590F0D);
+const Color secondaryColor = Color(0xFFFAF1EA);
+const Color greyColor = Color.fromARGB(255, 232, 233, 235);
+const Color darkgreyColor = Color(0xFF99A1AF);
+const Color whiteColor = Color(0xFFFFFFFF);
+const Color lavenderColor = Color(0xFFB39ABD);
+const Color espressoColor = Color(0xFF402524);
+const Color oliveColor = Color(0xFF785F2E);
+const Color roseColor = Color(0xFFE08F9F);
