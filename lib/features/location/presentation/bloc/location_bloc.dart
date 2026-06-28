@@ -8,8 +8,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   LocationBloc() : super(LocationState.initial()) {
     on<LoadCountries>(_onLoadCountries);
     on<SetLocation>(_onSetLocation);
-    on<DismissBanner>(_onDismissBanner);
-    on<ToggleShipsToMe>(_onToggleShipsToMe);
   }
 
   void _onLoadCountries(LoadCountries event, Emitter<LocationState> emit) {
@@ -19,23 +17,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   }
 
   void _onSetLocation(SetLocation event, Emitter<LocationState> emit) {
-  emit(state.copyWith(
-    selectedCountry: event.country,
-    showBanner: false,
-    shipsToMeEnabled: true,
-  ));
-}
-
-
-  void _onDismissBanner(DismissBanner event, Emitter<LocationState> emit) {
-    emit(state.copyWith(showBanner: false));
+    emit(state.copyWith(selectedCountry: event.country));
   }
-
-  void _onToggleShipsToMe(ToggleShipsToMe event, Emitter<LocationState> emit) {
-  if (!state.isLocationSet) {
-    // Can't enable without a location — UI should open the picker
-    return;
-  }
-  emit(state.copyWith(shipsToMeEnabled: !state.shipsToMeEnabled));
-}
 }

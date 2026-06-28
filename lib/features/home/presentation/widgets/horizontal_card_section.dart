@@ -19,7 +19,7 @@ class HorizontalCardSection extends StatelessWidget {
    
     return Column(crossAxisAlignment: CrossAxisAlignment.start ,
       children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:[Text(title,style: style ?? sectionHeader ),TextButton(onPressed: (onSeeAllTap) , child: Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 8.0, 0), child: Text('See all >',style: linkText)))],),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:[Text(title,style: style ?? sectionHeader ),if(onSeeAllTap !=null)TextButton(onPressed: (onSeeAllTap) , child: Padding(padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 8.0, 0), child: Text('See all >',style: linkText)))],),
         SizedBox(height: 19),
         SizedBox(
           height: 250, 

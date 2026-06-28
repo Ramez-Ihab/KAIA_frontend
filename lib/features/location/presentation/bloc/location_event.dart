@@ -10,8 +10,3 @@ class SetLocation extends LocationEvent {
   final Country country;
   SetLocation(this.country);
 }
-
-
-class DismissBanner extends LocationEvent {}
-
-class ToggleShipsToMe extends LocationEvent {}

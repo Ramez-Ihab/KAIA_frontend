@@ -1,14 +1,14 @@
 import 'package:kaia/core/usecases/usecase.dart';
-import 'package:kaia/core/entities/look.dart';
+import 'package:kaia/features/home/domain/entities/featured_item.dart';
 import 'package:kaia/features/home/domain/repositories/home_repository.dart';
 
-class GetFeaturedLook extends UseCase<Look, NoParams> {
+class GetFeaturedItem extends UseCase<FeaturedItem, NoParams> {
   final HomeRepository repository;
 
-  GetFeaturedLook(this.repository);
+  GetFeaturedItem(this.repository);
 
   @override
-  Future<Look> call(NoParams params) {
-    return repository.getFeaturedLook();
+  Future<FeaturedItem> call(NoParams params) {
+    return repository.getFeaturedItem();
   }
 }

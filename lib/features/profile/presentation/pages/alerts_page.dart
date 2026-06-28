@@ -1,114 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
+import 'package:kaia/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:kaia/features/profile/presentation/bloc/profile_event.dart';
+import 'package:kaia/features/profile/presentation/bloc/profile_state.dart';
 
-class AlertsPage extends StatefulWidget {
+class AlertsPage extends StatelessWidget {
   const AlertsPage({super.key});
 
   @override
-  State<AlertsPage> createState() => _AlertsPageState();
-}
-
-class _AlertsPageState extends State<AlertsPage> {
-  // TODO: persist these via domain/data layer
-  bool _allowNotifications = true;
-  bool _priceDrops = true;
-  bool _backInStock = true;
-  bool _newArrivals = true;
-  bool _newCollections = false;
-  bool _saleAlerts = true;
-  bool _orderShipping = true;
-  bool _recommendations = false;
-  bool _pushNotifications = true;
-  bool _email = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const Divider(height: 1, thickness: 0.5),
-              const SizedBox(height: 16),
-              _buildMasterToggle(),
-              const SizedBox(height: 20),
-              _buildSectionLabel('WHAT TO NOTIFY ME ABOUT'),
-              _buildToggleRow(
-                label: 'Price drops',
-                subtitle: 'When a saved item goes on sale',
-                value: _priceDrops,
-                onChanged: (v) => setState(() => _priceDrops = v),
-              ),
-              _buildToggleRow(
-                label: 'Back in stock',
-                subtitle: 'When a sold-out item returns',
-                value: _backInStock,
-                onChanged: (v) => setState(() => _backInStock = v),
-              ),
-              _buildToggleRow(
-                label: 'New arrivals',
-                subtitle: 'From the brands you favourite',
-                value: _newArrivals,
-                onChanged: (v) => setState(() => _newArrivals = v),
-              ),
-              _buildToggleRow(
-                label: 'New collections & drops',
-                subtitle: 'Fresh launches as they happen',
-                value: _newCollections,
-                onChanged: (v) => setState(() => _newCollections = v),
-              ),
-              _buildToggleRow(
-                label: 'Sale alerts',
-                subtitle: 'Major sales and seasonal events',
-                value: _saleAlerts,
-                onChanged: (v) => setState(() => _saleAlerts = v),
-              ),
-              _buildToggleRow(
-                label: 'Order & shipping',
-                subtitle: 'Updates on items you\'ve ordered',
-                value: _orderShipping,
-                onChanged: (v) => setState(() => _orderShipping = v),
-              ),
-              _buildToggleRow(
-                label: 'Recommendations',
-                subtitle: 'Picks chosen for your style',
-                value: _recommendations,
-                onChanged: (v) => setState(() => _recommendations = v),
-              ),
-              const SizedBox(height: 20),
-              _buildSectionLabel('HOW TO NOTIFY ME'),
-              _buildToggleRow(
-                label: 'Push notifications',
-                subtitle: 'On this device',
-                value: _pushNotifications,
-                onChanged: (v) => setState(() => _pushNotifications = v),
-              ),
-              _buildToggleRow(
-                label: 'Email',
-                subtitle: 'Weekly digest of activity',
-                value: _email,
-                onChanged: (v) => setState(() => _email = v),
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'You can change these any time. We\'ll only notify you about things you\'ve turned on.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'GlacialIndifference',
-                    color: darkgreyColor,
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        final n = state.notifications;
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(context),
+                  const Divider(height: 1, thickness: 0.5),
+                  const SizedBox(height: 16),
+                  _buildMasterToggle(context, n.masterToggle),
+                  const SizedBox(height: 20),
+                  _buildSectionLabel('WHAT TO NOTIFY ME ABOUT'),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Price drops',
+                    subtitle: 'When a saved item goes on sale',
+                    value: n.priceDrops,
+                    setting: 'priceDrops',
                   ),
-                ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Back in stock',
+                    subtitle: 'When a sold-out item returns',
+                    value: n.backInStock,
+                    setting: 'backInStock',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'New arrivals',
+                    subtitle: 'From the brands you favourite',
+                    value: n.newArrivals,
+                    setting: 'newArrivals',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'New collections & drops',
+                    subtitle: 'Fresh launches as they happen',
+                    value: n.newCollections,
+                    setting: 'newCollections',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Sale alerts',
+                    subtitle: 'Major sales and seasonal events',
+                    value: n.saleAlerts,
+                    setting: 'saleAlerts',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Order & shipping',
+                    subtitle: 'Updates on items you\'ve ordered',
+                    value: n.orderShipping,
+                    setting: 'orderShipping',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Recommendations',
+                    subtitle: 'Picks chosen for your style',
+                    value: n.recommendations,
+                    setting: 'recommendations',
+                  ),
+                  const SizedBox(height: 20),
+                  _buildSectionLabel('HOW TO NOTIFY ME'),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Push notifications',
+                    subtitle: 'On this device',
+                    value: n.pushNotifications,
+                    setting: 'pushNotifications',
+                  ),
+                  _buildToggleRow(
+                    context: context,
+                    label: 'Email',
+                    subtitle: 'Weekly digest of activity',
+                    value: n.email,
+                    setting: 'email',
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'You can change these any time. We\'ll only notify you about things you\'ve turned on.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'GlacialIndifference',
+                        color: darkgreyColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
-              const SizedBox(height: 30),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -135,7 +136,7 @@ class _AlertsPageState extends State<AlertsPage> {
     );
   }
 
-  Widget _buildMasterToggle() {
+  Widget _buildMasterToggle(BuildContext context, bool value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -181,8 +182,10 @@ class _AlertsPageState extends State<AlertsPage> {
               ),
             ),
             Switch(
-              value: _allowNotifications,
-              onChanged: (v) => setState(() => _allowNotifications = v),
+              value: value,
+              onChanged: (v) => context.read<ProfileBloc>().add(
+                    UpdateNotificationSetting(setting: 'masterToggle', value: v),
+                  ),
               activeThumbColor: Colors.white,
               activeTrackColor: Colors.green,
               inactiveThumbColor: Colors.white,
@@ -211,10 +214,11 @@ class _AlertsPageState extends State<AlertsPage> {
   }
 
   Widget _buildToggleRow({
+    required BuildContext context,
     required String label,
     required String subtitle,
     required bool value,
-    required ValueChanged<bool> onChanged,
+    required String setting,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -251,7 +255,9 @@ class _AlertsPageState extends State<AlertsPage> {
           ),
           Switch(
             value: value,
-            onChanged: onChanged,
+            onChanged: (v) => context.read<ProfileBloc>().add(
+                  UpdateNotificationSetting(setting: setting, value: v),
+                ),
             activeThumbColor: Colors.white,
             activeTrackColor: Colors.green,
             inactiveThumbColor: Colors.white,

@@ -2,13 +2,13 @@ import 'package:kaia/core/usecases/usecase.dart';
 import 'package:kaia/core/entities/look.dart';
 import 'package:kaia/features/home/domain/repositories/home_repository.dart';
 
-class GetTrendingLooks extends UseCase<List<Look>, NoParams> {
+class GetArrivalLooks extends UseCase<List<Look>, NoParams> {
   final HomeRepository repository;
 
-  GetTrendingLooks(this.repository);
+  GetArrivalLooks(this.repository);
 
   @override
   Future<List<Look>> call(NoParams params) {
-    return repository.getTrendingLooks();
+    return repository.getArrivalLooks();
   }
 }
