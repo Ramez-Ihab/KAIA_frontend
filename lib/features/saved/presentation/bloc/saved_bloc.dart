@@ -1,15 +1,33 @@
-// lib/features/saved/presentation/bloc/saved_bloc.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/core/entities/look.dart';
 import 'package:kaia/features/saved/domain/entities/saved_item.dart';
+import 'package:kaia/features/saved/domain/usecases/categorise_saved_item.dart';
+import 'package:kaia/features/saved/domain/usecases/clear_item_category.dart';
+import 'package:kaia/features/saved/domain/usecases/get_saved_item.dart';
+import 'package:kaia/features/saved/domain/usecases/is_item_saved.dart';
+import 'package:kaia/features/saved/domain/usecases/remove_saved_item.dart';
 import 'package:kaia/features/saved/domain/usecases/saved_category.dart';
+import 'package:kaia/features/saved/domain/usecases/toggle_save_item.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_event.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_state.dart';
 import 'package:kaia/features/saved/domain/usecases/sort_order.dart';
 
 class SavedBloc extends Bloc<SavedEvent, SavedState> {
-  SavedBloc() : super(SavedState.initial()) {
+  final GetSavedItems getSavedItems;
+  final ToggleSaveItem toggleSaveItem;
+  final RemoveSavedItem removeSavedItem;
+  final CategoriseSavedItem categoriseSavedItem;
+  final ClearItemCategory clearItemCategory;
+  final IsItemSaved isItemSaved;
+
+  SavedBloc({
+    required this.getSavedItems,
+    required this.toggleSaveItem,
+    required this.removeSavedItem,
+    required this.categoriseSavedItem,
+    required this.clearItemCategory,
+    required this.isItemSaved,
+  }) : super(SavedState.initial()) {
     on<LoadSavedItems>(_onLoadSavedItems);
     on<ToggleSaveItemEvent>(_onToggleSaveItem);
     on<RemoveSavedItemEvent>(_onRemoveSavedItem);
@@ -20,42 +38,46 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
     on<ClearItemCategoryEvent>(_onClearItemCategory);
   }
 
-  void _onLoadSavedItems(LoadSavedItems event, Emitter<SavedState> emit) {
-    // Later this will call the use case
-    // For now emit current state
+  Future<void> _onLoadSavedItems(LoadSavedItems event, Emitter<SavedState> emit) async {
+    final items = await getSavedItems(GetSavedItemsParams(
+      filter: state.selectedCategory,
+      sortOrder: state.sortOrder,
+    ));
     emit(state.copyWith(
-      filteredItems: _filterItems(state.allItems, state.selectedCategory),
+      allItems: items,
+      filteredItems: _filterItems(items, state.selectedCategory),
     ));
   }
 
-  void _onToggleSaveItem(ToggleSaveItemEvent event, Emitter<SavedState> emit) {
-    final existingIndex = state.allItems.indexWhere(
-      (item) => item.look.styleTag == event.look.styleTag && 
-                item.look.brand.name == event.look.brand.name,
-    );
+  Future<void> _onToggleSaveItem(ToggleSaveItemEvent event, Emitter<SavedState> emit) async {
+    final id = '${event.look.styleTag}|${event.look.brand.name}';
+    final saved = await isItemSaved(id);
 
-    List<SavedItem> updatedItems;
-
-    if (existingIndex != -1) {
-      // Already saved — remove it
-      updatedItems = List.from(state.allItems)..removeAt(existingIndex);
+    if (saved) {
+      await removeSavedItem(id);
+      final updatedItems = state.allItems.where((i) =>
+          '${i.look.styleTag}|${i.look.brand.name}' != id).toList();
+      emit(state.copyWith(
+        allItems: updatedItems,
+        filteredItems: _filterItems(updatedItems, state.selectedCategory),
+      ));
     } else {
-      // Not saved — add it
-      updatedItems = List.from(state.allItems)
-        ..add(SavedItem(
-          look: event.look,
-          savedDate: DateTime.now(),
-        ));
+      await toggleSaveItem(event.look);
+      final newItem = SavedItem(look: event.look, savedDate: DateTime.now());
+      final updatedItems = [...state.allItems, newItem];
+      emit(state.copyWith(
+        allItems: updatedItems,
+        filteredItems: _filterItems(updatedItems, state.selectedCategory),
+      ));
     }
-
-    emit(state.copyWith(
-      allItems: updatedItems,
-      filteredItems: _filterItems(updatedItems, state.selectedCategory),
-    ));
   }
 
-  void _onRemoveSavedItem(RemoveSavedItemEvent event, Emitter<SavedState> emit) {
-    final updatedItems = List<SavedItem>.from(state.allItems)..removeAt(event.index);
+  Future<void> _onRemoveSavedItem(RemoveSavedItemEvent event, Emitter<SavedState> emit) async {
+    final item = state.filteredItems[event.index];
+    final id = '${item.look.styleTag}|${item.look.brand.name}';
+    await removeSavedItem(id);
+    final updatedItems = state.allItems.where((i) =>
+        '${i.look.styleTag}|${i.look.brand.name}' != id).toList();
     emit(state.copyWith(
       allItems: updatedItems,
       filteredItems: _filterItems(updatedItems, state.selectedCategory),
@@ -82,25 +104,24 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
     emit(state.copyWith(isGridView: !state.isGridView));
   }
 
-  void _onCategoriseItem(CategoriseItem event, Emitter<SavedState> emit) {
+  Future<void> _onCategoriseItem(CategoriseItem event, Emitter<SavedState> emit) async {
+    final item = state.allItems[event.index];
+    final id = '${item.look.styleTag}|${item.look.brand.name}';
+    await categoriseSavedItem(CategoriseSavedItemParams(itemId: id, category: event.category));
     final updatedItems = List<SavedItem>.from(state.allItems);
-    final item = updatedItems[event.index];
     updatedItems[event.index] = item.copyWith(category: event.category);
-
     emit(state.copyWith(
       allItems: updatedItems,
       filteredItems: _filterItems(updatedItems, state.selectedCategory),
     ));
   }
 
-  void _onClearItemCategory(ClearItemCategoryEvent event, Emitter<SavedState> emit) {
+  Future<void> _onClearItemCategory(ClearItemCategoryEvent event, Emitter<SavedState> emit) async {
+    final item = state.allItems[event.index];
+    final id = '${item.look.styleTag}|${item.look.brand.name}';
+    await clearItemCategory(id);
     final updatedItems = List<SavedItem>.from(state.allItems);
-    final item = updatedItems[event.index];
-    updatedItems[event.index] = SavedItem(
-      look: item.look,
-      savedDate: item.savedDate,
-    );
-
+    updatedItems[event.index] = SavedItem(look: item.look, savedDate: item.savedDate);
     emit(state.copyWith(
       allItems: updatedItems,
       filteredItems: _filterItems(updatedItems, state.selectedCategory),
@@ -109,7 +130,7 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
 
   bool isLookSaved(Look look) {
     return state.allItems.any(
-      (item) => item.look.styleTag == look.styleTag && 
+      (item) => item.look.styleTag == look.styleTag &&
                 item.look.brand.name == look.brand.name,
     );
   }

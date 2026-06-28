@@ -1,12 +1,34 @@
-// lib/features/profile/presentation/bloc/profile_bloc.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaia/features/profile/domain/entities/notification_settings.dart';
+import 'package:kaia/features/profile/domain/usecases/archive_account.dart';
+import 'package:kaia/features/profile/domain/usecases/delete_account.dart';
+import 'package:kaia/features/profile/domain/usecases/get_notification_settings.dart';
+import 'package:kaia/features/profile/domain/usecases/get_user_profile.dart';
+import 'package:kaia/features/profile/domain/usecases/sign_out.dart';
+import 'package:kaia/features/profile/domain/usecases/update_notification_settings.dart';
+import 'package:kaia/features/profile/domain/usecases/update_user_profile.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_event.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_state.dart';
-import 'package:kaia/features/profile/domain/entities/notification_settings.dart';
+import 'package:kaia/core/usecases/usecase.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc() : super(ProfileState.initial()) {
+  final GetUserProfile getUserProfile;
+  final UpdateUserProfile updateUserProfile;
+  final GetNotificationSettings getNotificationSettings;
+  final UpdateNotificationSettings updateNotificationSettings;
+  final SignOut signOut;
+  final ArchiveAccount archiveAccount;
+  final DeleteAccount deleteAccount;
+
+  ProfileBloc({
+    required this.getUserProfile,
+    required this.updateUserProfile,
+    required this.getNotificationSettings,
+    required this.updateNotificationSettings,
+    required this.signOut,
+    required this.archiveAccount,
+    required this.deleteAccount,
+  }) : super(ProfileState.initial()) {
     on<LoadProfile>(_onLoadProfile);
     on<UpdateName>(_onUpdateName);
     on<UpdateUsername>(_onUpdateUsername);
@@ -19,24 +41,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<DeleteAccountEvent>(_onDeleteAccount);
   }
 
-  void _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) {
-    // Later this will call the use case
-    emit(state);
+  Future<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
+    final profile = await getUserProfile(NoParams());
+    final notifications = await getNotificationSettings(NoParams());
+    emit(state.copyWith(profile: profile, notifications: notifications));
   }
 
-  void _onUpdateName(UpdateName event, Emitter<ProfileState> emit) {
-    emit(state.copyWith(
-      profile: state.profile.copyWith(name: event.name),
-    ));
+  Future<void> _onUpdateName(UpdateName event, Emitter<ProfileState> emit) async {
+    final updated = state.profile.copyWith(name: event.name);
+    await updateUserProfile(updated);
+    emit(state.copyWith(profile: updated));
   }
 
-  void _onUpdateUsername(UpdateUsername event, Emitter<ProfileState> emit) {
-    emit(state.copyWith(
-      profile: state.profile.copyWith(username: event.username),
-    ));
+  Future<void> _onUpdateUsername(UpdateUsername event, Emitter<ProfileState> emit) async {
+    final updated = state.profile.copyWith(username: event.username);
+    await updateUserProfile(updated);
+    emit(state.copyWith(profile: updated));
   }
 
-  void _onUpdateNotificationSetting(UpdateNotificationSetting event, Emitter<ProfileState> emit) {
+  Future<void> _onUpdateNotificationSetting(UpdateNotificationSetting event, Emitter<ProfileState> emit) async {
     final current = state.notifications;
     NotificationSettings updated;
 
@@ -75,6 +98,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         updated = current;
     }
 
+    await updateNotificationSettings(updated);
     emit(state.copyWith(notifications: updated));
   }
 
@@ -96,16 +120,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ));
   }
 
-  void _onSignOut(SignOutEvent event, Emitter<ProfileState> emit) {
-    // Later this will call the use case and navigate to login
+  Future<void> _onSignOut(SignOutEvent event, Emitter<ProfileState> emit) async {
+    await signOut(NoParams());
     emit(ProfileState.initial());
   }
 
-  void _onArchiveAccount(ArchiveAccountEvent event, Emitter<ProfileState> emit) {
-    // Later this will call the use case
+  Future<void> _onArchiveAccount(ArchiveAccountEvent event, Emitter<ProfileState> emit) async {
+    await archiveAccount(NoParams());
   }
 
-  void _onDeleteAccount(DeleteAccountEvent event, Emitter<ProfileState> emit) {
-    // Later this will call the use case
+  Future<void> _onDeleteAccount(DeleteAccountEvent event, Emitter<ProfileState> emit) async {
+    await deleteAccount(NoParams());
   }
 }

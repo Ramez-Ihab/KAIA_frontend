@@ -45,15 +45,19 @@ class BrandCard extends StatelessWidget {
             ]),
 
             Positioned(
-              left: 164,
-              top: 18,
-              child: Text(
-                brand.initials,
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.w300,
-                  color: const Color.fromARGB(255, 184, 172, 149)
-                      .withValues(alpha: 0.8),
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 100,
+              child: Center(
+                child: Text(
+                  brand.initials,
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.w300,
+                    color: const Color.fromARGB(255, 184, 172, 149)
+                        .withValues(alpha: 0.8),
+                  ),
                 ),
               ),
             ),

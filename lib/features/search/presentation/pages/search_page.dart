@@ -15,7 +15,9 @@ import 'package:kaia/features/search/presentation/bloc/search_event.dart';
 import 'package:kaia/features/search/presentation/bloc/search_state.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final FocusNode? focusNode;
+
+  const SearchPage({super.key, this.focusNode});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -91,6 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                     Expanded(
                       child: TextField(
                         controller: _searchController,
+                        focusNode: widget.focusNode,
                         onChanged: (value) {
                           context.read<SearchBloc>().add(SearchTextChanged(value));
                         },
@@ -193,6 +196,10 @@ class _SearchPageState extends State<SearchPage> {
                       fontSize: 16,
                     ),
                   ),
+                  onPressed: () {
+                    _searchController.text = search;
+                    context.read<SearchBloc>().add(SearchTextChanged(search));
+                  },
                   onDeleted: () {
                     context.read<SearchBloc>().add(RemoveRecentSearchEvent(search));
                   },

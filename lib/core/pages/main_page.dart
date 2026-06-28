@@ -14,6 +14,13 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int tabIndex = 0;
   final GlobalKey<HomePageState> _homeKey = GlobalKey<HomePageState>();
+  final FocusNode _searchFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   void _switchToTab(int index) {
     setState(() {
@@ -35,8 +42,16 @@ class _MainPageState extends State<MainPage> {
         child: IndexedStack(
           index: tabIndex,
           children: [
-            HomePage(key: _homeKey, onSearchTap: () => _switchToTab(1)),
-            SearchPage(),
+            HomePage(
+              key: _homeKey,
+              onSearchTap: () {
+                _switchToTab(1);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _searchFocusNode.requestFocus();
+                });
+              },
+            ),
+            SearchPage(focusNode: _searchFocusNode),
             SavedPage(onBrowseDiscoverTap: () {
               _switchToTab(0);
               _homeKey.currentState?.switchToDiscoverTab();
