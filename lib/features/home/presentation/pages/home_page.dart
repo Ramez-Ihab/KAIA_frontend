@@ -16,8 +16,9 @@ import 'package:kaia/core/constants/country.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onSearchTap;
+  final VoidCallback? onLocationSet;
 
-  const HomePage({super.key, required this.onSearchTap});
+  const HomePage({super.key, required this.onSearchTap, this.onLocationSet});
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -100,7 +101,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               height: 40,
                               color: secondaryColor,
                               child: Text(
-                                'Set your location to see brands that ship to you',
+                                'Set your location',
                                 style: TextStyle(
                                   fontSize: 12.5,
                                   color: primaryColor,
@@ -119,7 +120,10 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 selectedCountry: locationState.selectedCountry ?? Country.all,
                                 onSelected: (country) {
                                   context.read<LocationBloc>().add(SetLocation(country));
-                                  context.read<HomeBloc>().add(LocationConfirmed());
+                                  widget.onLocationSet?.call();
+                                  Future.delayed(const Duration(milliseconds: 800), () {
+                                    context.read<HomeBloc>().add(LocationConfirmed());
+                                  });
                                 },
                               );
                             },
@@ -209,80 +213,29 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 10),
 
-          // Tabs + Ships to me
-          BlocBuilder<HomeBloc, HomeState>(
-            buildWhen: (prev, curr) => prev.shipsToMeEnabled != curr.shipsToMeEnabled,
-            builder: (context, homeState) {
-              return BlocBuilder<LocationBloc, LocationState>(
-                builder: (context, locationState) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: greyColor, width: 1.5)),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TabBar(
-                            padding: const EdgeInsets.fromLTRB(7.0, 0, 0, 0),
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            labelPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            indicatorWeight: 1,
-                            dividerColor: Colors.transparent,
-                            labelColor: primaryColor,
-                            unselectedLabelColor: darkgreyColor,
-                            labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, fontFamily: 'GlacialIndifference'),
-                            unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'GlacialIndifference'),
-                            controller: _tabController,
-                            tabs: const [
-                              Tab(text: 'For you'),
-                              Tab(text: 'Discover'),
-                              Tab(text: 'Brands'),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Ships to me',
-                              style: TextStyle(
-                                color: homeState.shipsToMeEnabled ? primaryColor : darkgreyColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'GlacialIndifference',
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Padding(padding:EdgeInsetsDirectional.fromSTEB(0, 0, 9.0, 0),child:SizedBox(width:40, child:
-                            FittedBox(fit: BoxFit.fill,child:
-                            Switch(
-                              value: homeState.shipsToMeEnabled,
-                              onChanged: (value) {
-                                if (value && !locationState.isLocationSet) {
-                                  showLocationBottomSheet(
-                                    context: context,
-                                    selectedCountry: locationState.selectedCountry ?? Country.all,
-                                    onSelected: (country) {
-                                      context.read<LocationBloc>().add(SetLocation(country));
-                                      context.read<HomeBloc>().add(LocationConfirmed());
-                                    },
-                                  );
-                                } else {
-                                  context.read<HomeBloc>().add(ToggleShipsToMe());
-                                }
-                              },
-                              activeThumbColor: primaryColor,
-                              inactiveThumbColor: darkgreyColor,
-                            )))),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+          // Tabs
+          Container(
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: greyColor, width: 1.5)),
+            ),
+            child: TabBar(
+              padding: const EdgeInsets.fromLTRB(7.0, 0, 0, 0),
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+              indicatorWeight: 1,
+              dividerColor: Colors.transparent,
+              labelColor: primaryColor,
+              unselectedLabelColor: darkgreyColor,
+              labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, fontFamily: 'GlacialIndifference'),
+              unselectedLabelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, fontFamily: 'GlacialIndifference'),
+              controller: _tabController,
+              tabs: const [
+                Tab(text: 'For you'),
+                Tab(text: 'Discover'),
+                Tab(text: 'Brands'),
+              ],
+            ),
           ),
 
           // Tab content

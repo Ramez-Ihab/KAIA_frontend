@@ -44,7 +44,8 @@ class MoodCard extends StatelessWidget {
           Positioned(
             bottom: 16,
             left: 16,
-            child: Text(mood.title, style: cardOverlay),
+            right: 16,
+            child: Text(mood.title, style: cardOverlay, maxLines: 2, overflow: TextOverflow.ellipsis),
           ),
         ],
       ),

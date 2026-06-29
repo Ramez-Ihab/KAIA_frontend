@@ -50,6 +50,7 @@ class FeaturedCard extends StatelessWidget {
           Positioned(
             bottom: 44,
             left: 19,
+            right: 50,
             child: Text(
               look.styleTag,
               style: const TextStyle(
@@ -57,13 +58,16 @@ class FeaturedCard extends StatelessWidget {
                 color: Color(0xFFFFFFFF),
                 fontFamily: 'GlacialIndifference',
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Positioned(bottom: 84, left: 19, child: Text('FEATURED', style: sectionLabel)),
           Positioned(
             bottom: 22,
             left: 19,
-            child: Text('${featured.looksCount} looks curated this week', style: bodyText),
+            right: 50,
+            child: Text('${featured.looksCount} looks curated this week', style: bodyText, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
           Positioned(
             top: 18.0,

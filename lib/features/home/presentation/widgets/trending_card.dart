@@ -45,8 +45,8 @@ class TrendingCard extends StatelessWidget {
             ),
           ),
 
-          Positioned(bottom: 38, left: 16, child: Text(look.styleTag, style: boldCardOverlay)),
-          Positioned(bottom: 22, left: 16, child: Text(look.brand.name, style: bodyText)),
+          Positioned(bottom: 38, left: 16, right: 10, child: Text(look.styleTag, style: boldCardOverlay, maxLines: 2, overflow: TextOverflow.ellipsis)),
+          Positioned(bottom: 22, left: 16, right: 10, child: Text(look.brand.name, style: bodyText, maxLines: 1, overflow: TextOverflow.ellipsis)),
 
           // Bookmark toggle
           Positioned(

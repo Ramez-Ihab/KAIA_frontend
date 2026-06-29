@@ -52,6 +52,8 @@ class SavedListCard extends StatelessWidget {
                       fontFamily: 'GlacialIndifference',
                       fontWeight: FontWeight.w400,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
                   Container(

@@ -99,6 +99,7 @@ class SavedGridCard extends StatelessWidget {
           Positioned(
             bottom: 12,
             left: 12,
+            right: 12,
             child: Text(
               item.look.brand.name,
               style: const TextStyle(
@@ -107,6 +108,8 @@ class SavedGridCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

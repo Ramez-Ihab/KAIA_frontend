@@ -28,6 +28,7 @@ import 'package:kaia/features/home/presentation/bloc/brands_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/brands_state.dart';
 import 'package:kaia/features/home/presentation/bloc/home_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/home_event.dart';
+import 'package:kaia/features/home/presentation/bloc/home_state.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -198,7 +199,151 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
+
+              // Ships to me
+              BlocBuilder<HomeBloc, HomeState>(
+                buildWhen: (prev, curr) =>
+                    prev.shipsToMeEnabled != curr.shipsToMeEnabled,
+                builder: (context, homeState) {
+                  return BlocBuilder<LocationBloc, LocationState>(
+                    builder: (context, locationState) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Ships to me',
+                              style: TextStyle(
+                                color: homeState.shipsToMeEnabled
+                                    ? primaryColor
+                                    : darkgreyColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'GlacialIndifference',
+                              ),
+                            ),
+                            SizedBox(width:10),
+                            SizedBox(
+                              width: 44,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Switch(
+                                  value: homeState.shipsToMeEnabled,
+                                  onChanged: (value) {
+                                    if (value && !locationState.isLocationSet) {
+                                      showLocationBottomSheet(
+                                        context: context,
+                                        selectedCountry:
+                                            locationState.selectedCountry ??
+                                                Country.all,
+                                        onSelected: (country) {
+                                          context
+                                              .read<LocationBloc>()
+                                              .add(SetLocation(country));
+                                          context
+                                              .read<HomeBloc>()
+                                              .add(LocationConfirmed());
+                                        },
+                                      );
+                                    } else {
+                                      context
+                                          .read<HomeBloc>()
+                                          .add(ToggleShipsToMe());
+                                    }
+                                  },
+                                  activeThumbColor: primaryColor,
+                                  inactiveThumbColor: darkgreyColor,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => showDialog(
+                                context: context,
+                                builder: (ctx) => Dialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        24, 24, 24, 20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.local_shipping_outlined,
+                                            size: 32, color: primaryColor),
+                                        const SizedBox(height: 12),
+                                        const Text(
+                                          'Ships to me',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'GlacialIndifference',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          'Only show brands that ship to you.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontFamily: 'GlacialIndifference',
+                                            color: darkgreyColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        GestureDetector(
+                                          onTap: () => Navigator.pop(ctx),
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 12),
+                                            decoration: BoxDecoration(
+                                              color: primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: const Text(
+                                              'Got it',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'GlacialIndifference',
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                margin: const EdgeInsets.only(left: 6),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color:
+                                          darkgreyColor.withValues(alpha: 0.4)),
+                                ),
+                                child: Icon(
+                                  Icons.question_mark_rounded,
+                                  size: 12,
+                                  color: darkgreyColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
 
               // SETTINGS section
               Padding(

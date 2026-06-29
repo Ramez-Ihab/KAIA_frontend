@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
                   _searchFocusNode.requestFocus();
                 });
               },
+              onLocationSet: () => _switchToTab(3),
             ),
             SearchPage(focusNode: _searchFocusNode),
             SavedPage(onBrowseDiscoverTap: () {

@@ -50,7 +50,8 @@ class StyleCard extends StatelessWidget {
           Positioned(
             bottom: 30,
             left: 18,
-            child: Text(look.styleTag, style: cardOverlay),
+            right: 10,
+            child: Text(look.styleTag, style: cardOverlay, maxLines: 2, overflow: TextOverflow.ellipsis),
           ),
 
           // Bookmark toggle

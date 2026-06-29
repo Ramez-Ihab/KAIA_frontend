@@ -98,7 +98,7 @@ class ArrivalCard extends StatelessWidget {
           const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
-            child: Text(look.brand.name, style: boldBrand),
+            child: Text(look.brand.name, style: boldBrand, maxLines: 2, overflow: TextOverflow.ellipsis),
           ),
         ],
       ),
