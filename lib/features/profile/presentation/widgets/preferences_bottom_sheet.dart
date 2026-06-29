@@ -6,7 +6,6 @@ import 'package:kaia/features/profile/presentation/bloc/preferences_event.dart';
 import 'package:kaia/features/profile/presentation/bloc/preferences_state.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_event.dart';
-import 'package:kaia/features/profile/presentation/bloc/profile_state.dart';
 
 void showPreferencesBottomSheet({required BuildContext context}) {
   // Seed the draft with whatever is currently saved in ProfileBloc
