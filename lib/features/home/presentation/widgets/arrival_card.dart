@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
 import 'package:kaia/core/constants/kaia_text_styles.dart';
 import 'package:kaia/core/entities/look.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:kaia/core/widgets/look_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
@@ -29,14 +30,11 @@ class ArrivalCard extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Container(
-                clipBehavior: Clip.hardEdge,
-                height: 220,
+              LookImage(
+                look: look,
                 width: 144,
-                decoration: BoxDecoration(
-                  color: look.color,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
+                height: 220,
+                borderRadius: BorderRadius.circular(15.0),
               ),
               Container(
                 clipBehavior: Clip.hardEdge,
@@ -57,11 +55,11 @@ class ArrivalCard extends StatelessWidget {
 
               Positioned(
                 top: 15,
-                left: 18,
+                left: 10,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: primaryColor,
+                    color: primaryColor.withAlpha(200),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(chip, style: newChip),

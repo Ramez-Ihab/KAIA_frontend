@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
 import 'package:kaia/core/entities/look.dart';
 import 'package:kaia/core/widgets/look_bottom_sheet.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_event.dart';
@@ -137,18 +138,12 @@ class _SeeAllCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => LookBottomSheet.show(context, look),
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: look.color ?? darkgreyColor.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(12),
-        ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Container(
-              color: look.color ?? darkgreyColor.withValues(alpha: 0.2),
-            ),
+            Positioned.fill(child: LookImage(look: look)),
 
             // Gradient overlay
             Positioned(

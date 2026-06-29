@@ -8,7 +8,7 @@ class CurrencyOption {
   const CurrencyOption(this.symbol, this.name, this.code);
 }
 
-const _currencies = [
+const allCurrencies = [
   CurrencyOption('د.إ', 'UAE Dirham', 'AED'),
   CurrencyOption('ريال', 'Saudi Riyal', 'SAR'),
   CurrencyOption('E£', 'Egyptian Pound', 'EGP'),
@@ -38,6 +38,7 @@ void showCurrencyBottomSheet({
     builder: (_) => _CurrencyBottomSheet(
       selectedCode: selectedCode,
       onSelected: onSelected,
+      currencies: allCurrencies,
     ),
   );
 }
@@ -45,10 +46,12 @@ void showCurrencyBottomSheet({
 class _CurrencyBottomSheet extends StatelessWidget {
   final String selectedCode;
   final ValueChanged<CurrencyOption> onSelected;
+  final List<CurrencyOption> currencies;
 
   const _CurrencyBottomSheet({
     required this.selectedCode,
     required this.onSelected,
+    required this.currencies,
   });
 
   @override
@@ -117,10 +120,10 @@ class _CurrencyBottomSheet extends StatelessWidget {
                   16,
                   16 + MediaQuery.of(context).padding.bottom,
                 ),
-                itemCount: _currencies.length,
+                itemCount: currencies.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  final currency = _currencies[index];
+                  final currency = currencies[index];
                   final isSelected = currency.code == selectedCode;
                   return GestureDetector(
                     onTap: () {

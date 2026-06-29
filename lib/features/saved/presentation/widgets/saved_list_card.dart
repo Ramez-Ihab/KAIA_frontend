@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:kaia/features/saved/domain/entities/saved_item.dart';
 import 'package:kaia/core/widgets/look_bottom_sheet.dart';
 
@@ -34,14 +35,7 @@ class SavedListCard extends StatelessWidget {
       child: Row(
         children: [
           // Left - Image filling left portion
-          Container(
-            width: 90,
-            decoration: BoxDecoration(
-              color: item.look.color,
-            ),
-            // Replace with Image.network later:
-            // child: Image.network(item.imageUrl, fit: BoxFit.cover),
-          ),
+          LookImage(look: item.look, width: 90, height: 90),
 
           // Middle - Brand name + category chip
           Expanded(

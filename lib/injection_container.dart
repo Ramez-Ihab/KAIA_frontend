@@ -63,6 +63,7 @@ import 'package:kaia/features/search/domain/usecases/remove_recent_search.dart';
 import 'package:kaia/features/search/domain/usecases/clear_recent_searches.dart';
 
 // BLoCs
+import 'package:kaia/features/profile/presentation/bloc/currency_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/home_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/for_you_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/discover_bloc.dart';
@@ -131,6 +132,7 @@ void setupDependencies() {
   sl.registerLazySingleton(() => ClearRecentSearches(sl()));
 
   // ── BLoCs ─────────────────────────────────────────────────────────────────
+  sl.registerLazySingleton(() => CurrencyBloc());
   sl.registerLazySingleton(() => HomeBloc());
   sl.registerLazySingleton(() => ForYouBloc(getForYouFeed: sl()));
   sl.registerLazySingleton(() => DiscoverBloc(

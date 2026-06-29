@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
 import 'package:kaia/core/entities/look.dart';
 import 'package:kaia/core/widgets/brand_bottom_sheet.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_event.dart';
@@ -53,16 +54,14 @@ class LookBottomSheet extends StatelessWidget {
             ),
 
             // Look image
-            Container(
-              width: double.infinity,
-              height: 350,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: look.color ?? darkgreyColor.withValues(alpha:0.2),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: LookImage(
+                look: look,
+                width: double.infinity,
+                height: 350,
                 borderRadius: BorderRadius.circular(16),
               ),
-              // Replace with Image.network later
             ),
             const SizedBox(height: 16),
 

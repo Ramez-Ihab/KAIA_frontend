@@ -39,10 +39,10 @@ class DiscoverContent extends StatelessWidget {
           moodRows.add(Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MoodCard(color: state.moods[i].color, title: state.moods[i].title),
+              MoodCard(mood: state.moods[i]),
               if (hasNext) ...[
                 const SizedBox(width: 8),
-                MoodCard(color: state.moods[i + 1].color, title: state.moods[i + 1].title),
+                MoodCard(mood: state.moods[i + 1]),
               ],
             ],
           ));
@@ -55,7 +55,7 @@ class DiscoverContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FeaturedCard(look: state.featured!.look, looksnum: state.featured!.looksCount),
+                FeaturedCard(featured: state.featured!),
                 const SizedBox(height: 30),
                 Text('Browse by mood', style: sectionHeader),
                 const SizedBox(height: 12),

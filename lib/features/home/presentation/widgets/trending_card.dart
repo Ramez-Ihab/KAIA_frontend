@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_text_styles.dart';
 import 'package:kaia/core/entities/look.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:kaia/core/widgets/look_bottom_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
@@ -21,14 +22,11 @@ class TrendingCard extends StatelessWidget {
       onTap: () => LookBottomSheet.show(context, look),
       child: Stack(
         children: [
-          Container(
-            clipBehavior: Clip.hardEdge,
-            height: 240,
+          LookImage(
+            look: look,
             width: 170,
-            decoration: BoxDecoration(
-              color: look.color,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
+            height: 240,
+            borderRadius: BorderRadius.circular(15.0),
           ),
           Container(
             clipBehavior: Clip.hardEdge,

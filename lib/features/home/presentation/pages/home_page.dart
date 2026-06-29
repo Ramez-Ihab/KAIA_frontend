@@ -68,8 +68,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: [
           // Logo
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: Image.asset('assets/images/KAIA.png', width: 200, height: 48, alignment: Alignment.topLeft),
+            padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0, 0, 0),
+            child: Text('KAIA',style: TextStyle(fontSize:32.5 ,fontFamily: 'ErotiqueTrial',fontWeight: FontWeight.w600,color: primaryColor)),
           ),
 
           // Location banner
@@ -254,6 +254,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ),
                             ),
                             const SizedBox(width: 5),
+                            Padding(padding:EdgeInsetsDirectional.fromSTEB(0, 0, 9.0, 0),child:SizedBox(width:40, child:
+                            FittedBox(fit: BoxFit.fill,child:
                             Switch(
                               value: homeState.shipsToMeEnabled,
                               onChanged: (value) {
@@ -272,7 +274,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               },
                               activeThumbColor: primaryColor,
                               inactiveThumbColor: darkgreyColor,
-                            ),
+                            )))),
                           ],
                         ),
                       ],

@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_text_styles.dart';
-import 'package:kaia/core/entities/look.dart';
-import 'package:kaia/core/widgets/look_bottom_sheet.dart';
+import 'package:kaia/core/pages/see_all_page.dart';
+import 'package:kaia/core/widgets/look_image.dart';
+import 'package:kaia/features/home/domain/entities/featured_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_event.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_state.dart';
 
 class FeaturedCard extends StatelessWidget {
-  final Look look;
-  final int looksnum;
+  final FeaturedItem featured;
 
-  const FeaturedCard({
-    super.key,
-    required this.look,
-    required this.looksnum,
-  });
-
+  const FeaturedCard({super.key, required this.featured});
 
   @override
   Widget build(BuildContext context) {
+    final look = featured.look;
+
     return GestureDetector(
-      onTap: () => LookBottomSheet.show(context, look),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SeeAllPage(title: look.styleTag, looks: featured.looks),
+        ),
+      ),
       child: Stack(
         children: [
-          Container(
-            clipBehavior: Clip.hardEdge,
-            height: 350,
+          LookImage(
+            look: look,
             width: 400,
-            decoration: BoxDecoration(
-              color: look.color,
-              borderRadius: BorderRadius.circular(29.0),
-            ),
+            height: 350,
+            borderRadius: BorderRadius.circular(29.0),
           ),
           Container(
-            clipBehavior: Clip.hardEdge,
-            height: 350,
             width: 400,
+            height: 350,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -49,7 +47,6 @@ class FeaturedCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(29.0),
             ),
           ),
-
           Positioned(
             bottom: 44,
             left: 19,
@@ -66,35 +63,31 @@ class FeaturedCard extends StatelessWidget {
           Positioned(
             bottom: 22,
             left: 19,
-            child: Text('$looksnum looks curated this week', style: bodyText),
+            child: Text('${featured.looksCount} looks curated this week', style: bodyText),
           ),
-
-          // Bookmark toggle
           Positioned(
             top: 18.0,
             right: 18.0,
             child: BlocBuilder<SavedBloc, SavedState>(
-  builder: (context, state) {
-    final isSaved = context.read<SavedBloc>().isLookSaved(look);
-    return GestureDetector(
-      onTap: () {
-        context.read<SavedBloc>().add(ToggleSaveItemEvent(look));
-      },
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha:0.3),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(
-          isSaved ? Icons.bookmark : Icons.bookmark_border,
-          size: 18,
-          color: Colors.white,
-        ),
-      ),
-    );
-  },
-),
+              builder: (context, state) {
+                final isSaved = context.read<SavedBloc>().isLookSaved(look);
+                return GestureDetector(
+                  onTap: () => context.read<SavedBloc>().add(ToggleSaveItemEvent(look)),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      isSaved ? Icons.bookmark : Icons.bookmark_border,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

@@ -16,6 +16,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/location/presentation/bloc/location_bloc.dart';
 import 'package:kaia/features/location/presentation/bloc/location_event.dart';
 import 'package:kaia/features/location/presentation/bloc/location_state.dart';
+import 'package:kaia/features/profile/presentation/bloc/currency_bloc.dart';
+import 'package:kaia/features/profile/presentation/bloc/currency_event.dart';
+import 'package:kaia/features/profile/presentation/bloc/currency_state.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_event.dart';
 import 'package:kaia/features/profile/presentation/bloc/profile_state.dart';
@@ -36,13 +39,8 @@ class ProfilePage extends StatelessWidget {
         return Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Align elements to the left
         children: [
-          
-Image.asset(
-              'assets/images/KAIA.png',
-              width: 200, 
-              height: 48, 
-              alignment: Alignment.topLeft,
-            ),
+          Padding(padding:EdgeInsetsDirectional.fromSTEB(10.0, 0, 0, 0),child:
+          Text('KAIA',style: TextStyle(fontSize:32.5 ,fontFamily: 'ErotiqueTrial',fontWeight: FontWeight.w600,color: primaryColor))),
           
           Expanded(child:SingleChildScrollView(
           child: Column(
@@ -237,16 +235,18 @@ Image.asset(
                   );
                 },
               ),
-              _buildSettingsRow(
-                icon: Icons.language,
-                label: 'Currency',
-                value: 'USD',
-                onTap: () => showCurrencyBottomSheet(
-                  context: context,
-                  selectedCode: 'USD',
-                  onSelected: (currency) {
-                    // Currency BLoC will handle this later
-                  },
+              BlocBuilder<CurrencyBloc, CurrencyState>(
+                builder: (context, currencyState) => _buildSettingsRow(
+                  icon: Icons.language,
+                  label: 'Currency',
+                  value: currencyState.selected.code,
+                  onTap: () => showCurrencyBottomSheet(
+                    context: context,
+                    selectedCode: currencyState.selected.code,
+                    onSelected: (currency) {
+                      context.read<CurrencyBloc>().add(SetCurrency(currency.code));
+                    },
+                  ),
                 ),
               ),
               _buildSettingsRow(

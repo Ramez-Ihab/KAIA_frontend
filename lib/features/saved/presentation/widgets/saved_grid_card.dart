@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
+import 'package:kaia/core/widgets/look_image.dart';
 import 'package:kaia/features/saved/domain/entities/saved_item.dart';
 import 'package:kaia/core/widgets/look_bottom_sheet.dart';
 
@@ -27,10 +28,8 @@ class SavedGridCard extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Layer 1 - Image (placeholder color for now)
-          Container(
-            color: item.look.color,
-          ),
+          // Layer 1 - Image
+          Positioned.fill(child: LookImage(look: item.look)),
 
           // Layer 2 - Gradient overlay at bottom
           Positioned(

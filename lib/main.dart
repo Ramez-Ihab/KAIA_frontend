@@ -13,6 +13,7 @@ import 'package:kaia/features/home/presentation/bloc/home_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/for_you_bloc.dart';
 import 'package:kaia/features/home/presentation/bloc/discover_bloc.dart';
 import 'package:kaia/features/profile/presentation/bloc/preferences_bloc.dart';
+import 'package:kaia/features/profile/presentation/bloc/currency_bloc.dart';
 
 void main() {
   setupDependencies();
@@ -28,6 +29,7 @@ void main() {
         BlocProvider(create: (_) => sl<SearchBloc>()),
         BlocProvider(create: (_) => sl<ProfileBloc>()),
         BlocProvider(create: (_) => sl<PreferencesBloc>()),
+        BlocProvider(create: (_) => sl<CurrencyBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false, 

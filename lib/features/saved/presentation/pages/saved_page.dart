@@ -23,10 +23,8 @@ class SavedPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Logo
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-              child: Image.asset('assets/images/KAIA.png', width: 200, height: 48, alignment: Alignment.topLeft),
-            ),
+            Padding(padding:EdgeInsetsDirectional.fromSTEB(10.0, 0, 0, 0),child:
+          Text('KAIA',style: TextStyle(fontSize:32.5 ,fontFamily: 'ErotiqueTrial',fontWeight: FontWeight.w600,color: primaryColor))),
             const SizedBox(height: 10),
 
             // Title row
