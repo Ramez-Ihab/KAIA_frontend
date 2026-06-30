@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_colors.dart';
 import 'package:kaia/core/widgets/look_image.dart';
 import 'package:kaia/features/saved/domain/entities/saved_item.dart';
-import 'package:kaia/core/widgets/look_bottom_sheet.dart';
+import 'package:kaia/core/pages/look_page.dart';
 
 
 class SavedGridCard extends StatelessWidget {
@@ -18,7 +18,7 @@ class SavedGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-  onTap: () => LookBottomSheet.show(context, item.look),
+  onTap: () => LookPage.show(context, item.look),
   child:Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(

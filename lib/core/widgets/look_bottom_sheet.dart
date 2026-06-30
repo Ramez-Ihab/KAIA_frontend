@@ -56,11 +56,23 @@ class LookBottomSheet extends StatelessWidget {
             // Look image
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LookImage(
-                look: look,
-                width: double.infinity,
-                height: 350,
-                borderRadius: BorderRadius.circular(16),
+              child: GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    opaque: false,
+                    barrierColor: Colors.black.withAlpha(20),
+                    pageBuilder: (_, __, ___) => _FullScreenImage(look: look),
+                    transitionsBuilder: (_, anim, __, child) =>
+                        FadeTransition(opacity: anim, child: child),
+                  ),
+                ),
+                child: LookImage(
+                  look: look,
+                  width: double.infinity,
+                  height: 350,
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -158,7 +170,6 @@ class LookBottomSheet extends StatelessWidget {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () {
-                    Navigator.pop(context);
                     BrandBottomSheet.show(context, look.brand);
                   },
                   style: FilledButton.styleFrom(
@@ -169,7 +180,7 @@ class LookBottomSheet extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    'View brand',
+                    'View product',
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: 'GlacialIndifference',
@@ -187,32 +198,25 @@ class LookBottomSheet extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
                 width: double.infinity,
-                child: OutlinedButton(
+                child: FilledButton(
                   onPressed: () {
-                    // Open external URL later
+                    BrandBottomSheet.show(context, look.brand);
                   },
-                  style: OutlinedButton.styleFrom(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFFB8A88A),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: BorderSide(color: darkgreyColor.withValues(alpha:0.3)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Visit website',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'GlacialIndifference',
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Icon(Icons.open_in_new, size: 16, color: darkgreyColor),
-                    ],
+                  child: const Text(
+                    'View brand',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'GlacialIndifference',
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -220,6 +224,55 @@ class LookBottomSheet extends StatelessWidget {
             const SizedBox(height: 20),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FullScreenImage extends StatelessWidget {
+  final Look look;
+
+  const _FullScreenImage({required this.look});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          Center(
+            child: InteractiveViewer(
+              minScale: 0.8,
+              maxScale: 4.0,
+              child: look.imageUrl != null && look.imageUrl!.isNotEmpty
+                  ? Image.network(
+                      look.imageUrl!,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                    )
+                  : Container(color: look.color ?? const Color(0xFFE0D5C8)),
+            ),
+          ),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.close, color: Colors.white, size: 20),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

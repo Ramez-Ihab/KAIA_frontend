@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaia/core/constants/kaia_text_styles.dart';
 import 'package:kaia/core/entities/look.dart';
 import 'package:kaia/core/widgets/look_image.dart';
-import 'package:kaia/core/widgets/look_bottom_sheet.dart';
+import 'package:kaia/core/pages/look_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_bloc.dart';
 import 'package:kaia/features/saved/presentation/bloc/saved_event.dart';
@@ -21,7 +21,7 @@ class StyleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => LookBottomSheet.show(context, look),
+      onTap: () => LookPage.show(context, look),
       child: Stack(
         children: [
           LookImage(

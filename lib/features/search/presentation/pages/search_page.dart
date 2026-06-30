@@ -55,10 +55,10 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     final popularLooks = [
-      Look(imageUrl: 'https://images.unsplash.com/photo-1531356495-75ccc754cb64?q=80&w=765&auto=format&fit=crop', styleTag: 'Night Out', brand: okhtein, color: Colors.white),
-      Look(imageUrl: 'https://images.unsplash.com/photo-1551029849-7e599391c0da?q=80&w=687&auto=format&fit=crop', styleTag: 'Birthday', brand: reemami, color: Colors.brown),
-      Look(imageUrl: 'https://plus.unsplash.com/premium_photo-1755164638767-6596209e3d0b?q=80&w=687&auto=format&fit=crop', styleTag: 'Casual', brand: emergencyRoom, color: Colors.green),
-      Look(imageUrl: 'https://plus.unsplash.com/premium_photo-1728657018900-5514f37fde59?q=80&w=688&auto=format&fit=crop', styleTag: 'Romantic', brand: dalya, color: Colors.deepPurple),
+      Look(imageUrls: ['https://images.unsplash.com/photo-1531356495-75ccc754cb64?q=80&w=765&auto=format&fit=crop'], styleTag: 'Night Out', brand: okhtein, color: Colors.white),
+      Look(imageUrls: ['https://images.unsplash.com/photo-1551029849-7e599391c0da?q=80&w=687&auto=format&fit=crop'], styleTag: 'Birthday', brand: reemami, color: Colors.brown),
+      Look(imageUrls: ['https://plus.unsplash.com/premium_photo-1755164638767-6596209e3d0b?q=80&w=687&auto=format&fit=crop'], styleTag: 'Casual', brand: emergencyRoom, color: Colors.green),
+      Look(imageUrls: ['https://plus.unsplash.com/premium_photo-1728657018900-5514f37fde59?q=80&w=688&auto=format&fit=crop'], styleTag: 'Romantic', brand: dalya, color: Colors.deepPurple),
     ];
     return popularLooks.map((look) => StyleCard(look: look)).toList();
   }
